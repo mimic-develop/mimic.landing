@@ -4,10 +4,14 @@
       <img src="/images/object-1.png" alt="Object 1" class="object-1-left" ref="object1Left">
       <img src="/images/object-1.png" alt="Object 1" class="object-1-right">
 
-      <img src="/images/branch-image.svg" alt="Branch Image" class="branch-image" ref="branchImage">
-      <img src="/images/map-image.svg" alt="Map Image" class="map-image" ref="mapImage">
+      <div class="location-wrapper">
+        <p class="location-text" ref="locationText">LOCATION</p>
 
-      <p class="location-text" ref="locationText">LOCATION</p>
+        <div class="map-wrapper">
+          <img src="/images/branch-image.svg" alt="Branch Image" class="branch-image" ref="branchImage">
+          <img src="/images/map-image.svg" alt="Map Image" class="map-image" ref="mapImage">
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -44,8 +48,8 @@ const setupAnimation = () => {
   // Animation sequence
   tl
     .to(object1Left.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.5")
-    .to([locationText.value, mapImage.value], { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, ">")
-    .to([branchImage.value], { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, ">");
+    .to([locationText.value, mapImage.value], { y: 0, autoAlpha: 1, duration: 0.5, ease: 'power2.out' }, ">")
+    .to([branchImage.value], { y: 0, autoAlpha: 1, duration: 2, ease: 'power2.out' }, ">");
 };
 
 watch(() => props.isCurrentPage, (isCurrent) => {
@@ -79,16 +83,18 @@ onMounted(() => {
 .content-wrapper {
   position: relative;
   width: 1920px;
-  height: 1080px;
-  transform: scale(0.8);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .object-1-left {
   position: absolute;
-  width: 897px;
-  height: 897px;
-  bottom: -860px;
-  left: -400px;
+  width: 634px;
+  height: 634px;
+  bottom: -440px;
+  left: -100px;
   opacity: 0.8;
   rotate: -136.97deg;
 }
@@ -97,52 +103,48 @@ onMounted(() => {
   position: absolute;
   width: 500px;
   height: 500px;
-  top: -600px;
-  right: -130px;
+  top: -390px;
+  right: 30px;
   opacity: 0.8;
   rotate: -136.97deg;
 }
 
+.location-wrapper {
+  width: 1920px;
+  height: 100%;
+  padding: 0 150px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.map-wrapper {
+  width: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .branch-image {
-  position: absolute;
-  width: 630.69px;
-  height: 297.77px;
-  top: 267.73px;
-  left: 1038.22px;
+  width: 631px;
+  height: 298px;
+  margin-left: 235px;
+  margin-bottom: 240px;
+
 }
 
 .map-image {
   position: absolute;
-  width: 579.22px;
-  height: 794.03px;
-  top: 142.57px;
-  left: 946.29px;
+  width: 579px;
+  height: 794px;
 }
 
 .location-text {
-  position: absolute;
   width: 280px;
   height: 40px;
-  top: 536px;
-  left: 174px;
   font-family: 'Figerona', sans-serif;
   font-weight: 300;
   font-size: 60px;
   line-height: 0.67em;
-  letter-spacing: 0.03em;
-  text-align: center;
-}
-
-.branch-name-text {
-  position: absolute;
-  width: 105px;
-  height: 40px;
-  top: 293px;
-  left: 1566px;
-  font-family: 'Gmarket Sans TTF', sans-serif;
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 2em;
   letter-spacing: 0.03em;
   text-align: center;
 }

@@ -45,6 +45,26 @@
   </main>
 </template>
 
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import { gsap } from 'gsap';
+
+const header = ref(null);
+const mainContent = ref(null);
+
+onMounted(() => {
+  const tl = gsap.timeline();
+
+  // Initial states
+  gsap.set('.header, .main-content > div', { autoAlpha: 0, y: 30 });
+
+  // Animation sequence
+  tl.to('.header', { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' })
+    .to('.background-elements', { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' }, "-=0.5")
+    .to('.main-text', { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' }, "-=0.5");
+});
+</script>
+
 <style scoped>
 
 /* Background Elements (Rectangles) */

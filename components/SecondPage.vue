@@ -1,16 +1,18 @@
 <template>
   <div class="second-page" ref="secondPage">
-    <div class="content">
-      <h2 class="title">All in Fun</h2>
-      <p class="detail">
-        다양한 재미가 자연스럽게 공존하는 고, 미믹입니다.<br />
-        그렇게 만들어진 공간은 미믹에 어울리는 사람들을 끌어당깁니다<br />
-        미믹은 언제 찾아와도 편안하고, 다시 오고 싶은 당신의 제 3의 공간이 됩니다.
-      </p>
-    </div>
-    <div class="images-container">
-      <img alt="object-2" class="rectangle-3" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
-      <img alt="object-2" class="rectangle-4" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
+    <div class="wrapper">
+      <div class="content">
+        <h2 class="title">All in Fun</h2>
+        <p class="detail">
+          다양한 재미가 자연스럽게 공존하는 곳, 미믹입니다<br />
+          그렇게 만들어진 공간은 미믹에 어울리는 사람들을 끌어당깁니다<br />
+          미믹은 언제 찾아와도 편안하고, 다시 오고 싶은 당신의 제 3의 공간이 됩니다
+        </p>
+      </div>
+      <div class="images-container">
+        <img alt="object-2" class="rectangle-3" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
+        <img alt="object-2" class="rectangle-4" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
+      </div>
     </div>
   </div>
 </template>
@@ -54,15 +56,24 @@ onBeforeUnmount(() => {
   height: 100vh;
   background-color: #000;
   color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* 양쪽 정렬 */
   padding: 0 10%; /* 좌우 여백 */
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* 양쪽 정렬 */
 }
 
 .content {
   text-align: left;
+}
+
+.wrapper {
+  position: relative;
+  width: 1920px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .title {

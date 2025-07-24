@@ -72,9 +72,9 @@ const setupAnimation = () => {
   });
 
   // Animation sequence
-  tl.to(contentWrapper.value, { y: 0, autoAlpha: 1, duration: 2, ease: 'power2.out' })
-    .to([object1Small.value, object1Large.value], { autoAlpha: 1, duration: 2 }, "-=1.5")
-    .to(svgContainer.value, { autoAlpha: 1, duration: 2 }, "-=.5")
+  tl.to(contentWrapper.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' })
+    .to([object1Small.value, object1Large.value], { autoAlpha: 1, duration: 1 }, "-=1.5")
+    .to(svgContainer.value, { autoAlpha: 1, duration: 1 }, "-=.5")
     .add(() => {
       if (thirdText.value) {
         (thirdText.value as any).animatePaths();
@@ -82,7 +82,7 @@ const setupAnimation = () => {
     })
     .to(paths, {
       strokeDashoffset: 0,
-      duration: 2,
+      duration: 1,
       ease: 'power1.inOut',
       stagger: 0.2
     }, ">")
@@ -123,16 +123,16 @@ onMounted(() => {
 
 .content-wrapper {
   position: relative;
-  width: 100vw;
+  width: 1920px;
   height: 100vh;
 }
 
 .object-1-small {
   position: absolute;
-  width: 318.41px;
-  height: 318.41px;
-  top: 34.2px;
-  left: 0px;
+  width: 318px;
+  height: 318px;
+  top: 34px;
+  left: 0;
   opacity: 0.8;
   rotate: -136.97deg;
 }

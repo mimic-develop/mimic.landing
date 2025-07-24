@@ -91,7 +91,7 @@ onMounted(() => {
   }, {
     opacity: 1,
     y: 0,
-    duration: 1,
+    duration: 0.7,
     ease: 'power1.out',
     stagger: 0.2
   });
@@ -101,9 +101,8 @@ onMounted(() => {
   }, {
     opacity: 1,
     y: 0,
-    duration: 1,
+    duration: 0.5,
     ease: 'power1.out',
-    delay: 0.3
   });
 
   timeline.addPause(); // 초기 애니메이션 후 일시 정지

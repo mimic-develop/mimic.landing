@@ -28,22 +28,22 @@ const tl = gsap.timeline({ paused: true });
 
 const setupAnimation = () => {
   tl.clear();
-  
+
   const animatedElements = [
-    object1TopLeft.value,
-    object1MiddleLeft.value,
+    // object1TopLeft.value,
+    // object1MiddleLeft.value,
     object1BottomRight.value,
     contactImage.value,
   ];
 
   // Initial states
-  gsap.set(contentWrapper.value, { y: 100, autoAlpha: 0 });
+  // gsap.set(contentWrapper.value, { y: 100, autoAlpha: 0 });
   gsap.set(animatedElements, { y: 50, autoAlpha: 0 });
 
   // Animation sequence
   tl.to(contentWrapper.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' })
-    .to(object1TopLeft.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.5")
-    .to(object1MiddleLeft.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.7")
+    // .to(object1TopLeft.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.5")
+    // .to(object1MiddleLeft.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.7")
     .to(object1BottomRight.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.7")
     .to(contactImage.value, { y: 0, autoAlpha: 1, duration: 1, ease: 'power2.out' }, "-=.5");
 };
@@ -79,42 +79,43 @@ onMounted(() => {
 .content-wrapper {
   position: relative;
   width: 1920px;
-  height: 1080px;
-  transform: scale(0.8);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .object-1-top-left {
   position: absolute;
-  width: 897.33px;
-  height: 897.33px;
-  top: -317px;
-  left: -250px;
+  width: 634px;
+  height: 634px;
+  left: -100px;
+  top: -190px;
   opacity: 0.8;
+  rotate: -136.97deg;
 }
 
 .object-1-middle-left {
   position: absolute;
-  width: 303.33px;
-  height: 303.33px;
-  top: 187.88px;
-  left: -7.95px;
+  width: 246px;
+  height: 246px;
+  top: 220px;
+  left: 10px;
   opacity: 0.8;
+  rotate: 164.22deg;
 }
 
 .object-1-bottom-right {
   position: absolute;
-  width: 477.26px;
-  height: 477.26px;
-  top: 569.15px;
-  left: 1417.51px;
+  width: 369px;
+  height: 369px;
+  bottom: 100px;
+  right: 80px;
   opacity: 0.8;
+  rotate: 68.73deg;
 }
 
 .contact-image {
-  position: absolute;
-  width: 636.55px;
-  height: 479.36px;
-  top: 262.28px;
-  left: 641.66px;
+  width: 35rem;
 }
 </style>
