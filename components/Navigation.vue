@@ -18,9 +18,10 @@ defineProps<{
 <style scoped>
 /* Scroll Navigation Dots */
 .scroll-navigation-dots {
-  position: absolute;
-  right: calc(190 / 1920 * 100vw); /* 1728.21px from left, so (1920 - 1728.21) from right */
-  transform: translateX(-50%);
+  position: fixed;
+  top: 50%;
+  right: 50px; /* 오른쪽 여백 */
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   gap: 38px; /* 37.75px gap */

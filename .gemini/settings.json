@@ -10,13 +10,6 @@
         "--figma-api-key\u003dfigd_aQeWoXRIyFIY3n6SFPYdu9HXx5yrL19CFJFqO1Jw",
         "--stdio"
       ]
-    },
-    "jetbrains": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@jetbrains/mcp-proxy"
-      ]
     }
   }
 }

@@ -31,28 +31,19 @@
     <div class="background-elements">
       <!-- Rectangle 1 -->
       <img
-          src="/images/rectangle-1-56586a.png"
+          src="/images/object-1.png"
           alt="Decorative Rectangle 1"
           class="rectangle rectangle-1"
       />
       <!-- Rectangle 2 -->
       <img
-          src="/images/rectangle-2-56586a.png"
+          src="/images/object-1.png"
           alt="Decorative Rectangle 2"
           class="rectangle rectangle-2"
       />
     </div>
   </main>
 </template>
-
-<script setup>
-// No script logic needed for now
-// /*
-// 첫번째 페이지는 MainPage.vue인데 이제 두번째 페이지를 만드려고해. https://www.figma.com/design/qiAxSuMDrf1GAr5jq7O9i1/MiMic?node-id=1131-3110&t=wb98Afz8YRN3MtHF-4 이 피그마 디자인을 보고 참고해서 작성해줘. 두번쨰 페이지가 보이는 방식은       │
-//│   스크롤로 내리면 이야. 서서히 내려가는게 아닌, 두번째 페이지로 바로 내려가는 , 랜딩 페이지에서 많이 볼 수 있는 그런
-//
-// */
-</script>
 
 <style scoped>
 
@@ -148,10 +139,13 @@
   align-items: flex-start;
   z-index: 5;
   font-size: 82px;
+  margin: 0 auto; /* 수평 중앙 정렬 */
 }
 
 .main-text {
-  position: absolute;
+  position: relative; /* position: absolute 대신 relative 사용 */
+  width: 100%;
+  height: 100%;
 }
 
 .third-text {
