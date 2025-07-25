@@ -10,8 +10,8 @@
         </p>
       </div>
       <div class="images-container">
-        <img alt="object-2" class="rectangle-3" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
-        <img alt="object-2" class="rectangle-4" :class="{ 'visible': isVisible }" src="/images/object-2.png" />
+        <img alt="object-2" class="rectangle-3" :class="{ 'visible': isVisible }" src="~/assets/images/object-2.png" />
+        <img alt="object-2" class="rectangle-4" :class="{ 'visible': isVisible }" src="~/assets/images/object-2.png" />
       </div>
     </div>
   </div>
@@ -157,6 +157,30 @@ onBeforeUnmount(() => {
   }
   100% {
     transform: translateY(0px) rotate(53.3deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: calc(100vw / 9);
+  }
+
+  .detail {
+    font-size: calc(100vw / 25);
+  }
+
+  .rectangle-4 {
+    width: 200px;
+    height: 200px;
+    top: 500px;
+    left: 0 /* Figma x: 1494.31 -> 1920/2 + 200 (임의 조정) */
+  }
+
+  .rectangle-3 {
+    width: 300px;
+    height: 300px;
+    top: 200px;
+    left: -40px /* Figma x: 1494.31 -> 1920/2 + 200 (임의 조정) */
   }
 }
 </style>

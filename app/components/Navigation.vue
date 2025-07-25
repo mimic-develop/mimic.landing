@@ -40,4 +40,10 @@ defineProps<{
   opacity: 1;
 }
 
+@media (max-width: 768px) {
+  .scroll-navigation-dots {
+    display: none;
+  }
+}
+
 </style>

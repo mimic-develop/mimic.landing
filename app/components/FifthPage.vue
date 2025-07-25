@@ -4,13 +4,13 @@
       미믹의 아레나 테이블은 실시간으로 유저 정보를 테이블에 띄우는 국내 최초의 몰입형 홀덤 시스템 입니다
     </div>
     <img
-        src="/images/table-image-red.svg"
+        :src="tableImageUrl"
         alt="Table Image Red"
         class="table-image-red"/>
     <div class="gms-text">GMS</div>
     <div class="game-management-system-text">GAME MANAGEMENT SYSTEM</div>
-    <img src="/images/hand-box.svg" alt="Hand Box" class="hand-box-image" />
-    <img src="/images/rank-system.svg" alt="Rank System" class="rank-system-image" />
+    <img src="~/assets/images/hand-box.svg" alt="Hand Box" class="hand-box-image" />
+    <img src="~/assets/images/rank-system.svg" alt="Rank System" class="rank-system-image" />
   </div>
 </template>
 
@@ -18,6 +18,9 @@
 import {onBeforeUnmount, onMounted, ref} from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+import tableImageRed from '~/assets/images/table-image-red.svg';
+import tableImageWhite from '~/assets/images/table-image-white.svg';
 
 const emits = defineEmits<{
   (e: 'update:isScrolling', isScrolling: boolean): void;
@@ -52,13 +55,16 @@ const handleWheel = (event: WheelEvent) => {
   }
 };
 
+const tableImageUrl = ref(tableImageRed);
+
+const key = ref(0);
+
 watch(isVisible, (newValue) => {
   if (newValue) {
     window.addEventListener('wheel', handleWheel, { passive: false });
-    const tableImage = document.querySelector('.table-image-red') as HTMLImageElement;
-    if (tableImage) {
-      tableImage.src = '/images/table-image-red.svg'; // 이미지 초기화
-    }
+
+    tableImageUrl.value = tableImageRed
+
     if (timeline) {
       timeline.seek(0).pause(); // 타임라인 초기화 및 일시 정지
       timeline.play(); // 초기 애니메이션 시작
@@ -83,6 +89,26 @@ onMounted(() => {
     document.querySelector('.gms-text'),
     document.querySelector('.game-management-system-text'),
   ];
+
+  // Determine animation values based on screen width
+  let tableImageAnimProps = {};
+  if (window.innerWidth <= 768) {
+    tableImageAnimProps = {
+      left: '50%',
+      top: '45vh', // Adjusted for mobile
+      width: '90vw',
+      height: 'auto',
+      x: '-50%', // Center horizontally
+      y: '0%', // Keep y at 0 for the animation
+    };
+  } else {
+    tableImageAnimProps = {
+      left: -293,
+      top: 317.58,
+      width: 1120,
+      height: 444.42,
+    };
+  }
 
   // Stage 0: FifthPage가 나타날 때 텍스트와 테이블 이미지 나타나는 애니메이션
   timeline.fromTo(textElements, {
@@ -118,19 +144,16 @@ onMounted(() => {
   // Stage 2: 테이블 이미지 애니메이션
   timeline.to(tableImage, {
     duration: 2,
-    left: -293,
-    top: 317.58,
-    width: 1120,
-    height: 444.42,
+    ...tableImageAnimProps, // Apply dynamic properties
     ease: 'power2.inOut',
     onComplete: () => {
       if (tableImage) {
-        tableImage.src = '/images/table-image-white.svg';
+        tableImageUrl.value = tableImageWhite
       }
     },
     onReverseComplete: () => {
       if (tableImage) {
-        tableImage.src = '/images/table-image-red.svg';
+        tableImageUrl.value = tableImageRed
       }
     }
   }, '>-0.5'); // 텍스트 사라지는 애니메이션과 겹치도록 조정
@@ -198,11 +221,6 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-.gms-text, .text-content, .game-management-system-text {
-  /* transform: translateY(60px); */ /* 제거 */
-  /* transition: opacity 1s ease-out, transform 1s ease-out; */ /* 제거 */
-}
-
 .text-content {
   position: absolute;
   left: 532px;
@@ -263,11 +281,6 @@ onBeforeUnmount(() => {
   transform: translateY(60px); /* GSAP 초기 상태 */
 }
 
-.fifth-page-container .visible {
-  /* opacity: 1; */ /* 제거 */
-  /* transform: translateY(0); */ /* 제거 */
-}
-
 .hand-box-image {
   position: absolute;
   left: 550px; /* 피그마에서 확인한 x 위치 */
@@ -284,5 +297,73 @@ onBeforeUnmount(() => {
   width: 982.04px; /* 피그마에서 확인한 너비 */
   height: 259.47px; /* 피그마에서 확인한 높이 */
   opacity: 0; /* 초기 투명도 설정 */
+}
+
+@media (max-width: 768px) {
+  .fifth-page-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* 상단 정렬 */
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .text-content {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 60vh;
+    width: 90%;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .gms-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30vh;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .game-management-system-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 35vh;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .table-image-red {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 40vh;
+    width: 90vw;
+    height: auto;
+  }
+
+  .hand-box-image {
+    position: absolute;
+    left: 61.5%;
+    transform: translateX(-50%);
+    top: 44vh;
+    width: 66vw;
+    height: auto;
+  }
+
+  .rank-system-image {
+    position: absolute;
+    left: 64%;
+    transform: translateX(-50%);
+    top: 54.5vh;
+    width: 62vw;
+    height: auto;
+  }
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
   <div class="eighth-page-container">
     <div class="content-wrapper" ref="contentWrapper">
-      <img src="/images/object-1.png" alt="Object 1" class="object-1-left" ref="object1Left">
-      <img src="/images/object-1.png" alt="Object 1" class="object-1-right">
+      <img src="~/assets/images/object-1.png" alt="Object 1" class="object-1-left" ref="object1Left">
+      <img src="~/assets/images/object-1.png" alt="Object 1" class="object-1-right">
 
       <div class="location-wrapper">
         <p class="location-text" ref="locationText">LOCATION</p>
 
         <div class="map-wrapper">
-          <img src="/images/branch-image.svg" alt="Branch Image" class="branch-image" ref="branchImage">
-          <img src="/images/map-image.svg" alt="Map Image" class="map-image" ref="mapImage">
+          <img src="~/assets/images/branch-image.svg" alt="Branch Image" class="branch-image" ref="branchImage">
+          <img src="~/assets/images/map-image.svg" alt="Map Image" class="map-image" ref="mapImage">
         </div>
       </div>
     </div>
@@ -147,5 +147,60 @@ onMounted(() => {
   line-height: 0.67em;
   letter-spacing: 0.03em;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .content-wrapper {
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .object-1-left {
+    width: 200px;
+    height: 200px;
+    bottom: auto;
+    left: 0;
+    top: 50px;
+    rotate: 0deg;
+  }
+
+  .object-1-right {
+    width: 150px;
+    height: 150px;
+    top: auto;
+    right: 0;
+    bottom: 50px;
+    rotate: 0deg;
+  }
+
+  .location-wrapper {
+    flex-direction: column;
+    padding: 0;
+    width: 100%;
+    height: auto;
+  }
+
+  .location-text {
+    font-size: 40px;
+    margin-bottom: 150px;
+  }
+
+  .map-wrapper {
+    width: 344px;
+    flex-direction: column;
+  }
+
+  .branch-image {
+    width: calc(344px*0.75);
+    height: auto;
+    margin: 0 0 -200px 60px;
+  }
+
+  .map-image {
+    width: calc(344px*0.90);
+    height: auto;
+    position: relative;
+  }
 }
 </style>

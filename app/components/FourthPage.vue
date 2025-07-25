@@ -1,17 +1,17 @@
 <template>
   <div class="fourth-page" ref="fourthPage">
-    <img src="/images/object-1.png" alt="object-1" class="object-1-large" :class="{ 'visible': isVisible }" />
-    <img src="/images/object-1.png" alt="object-1" class="object-1-small" :class="{ 'visible': isVisible }" />
+    <img src="~/assets/images/object-1.png" alt="object-1" class="object-1-large" :class="{ 'visible': isVisible }" />
+    <img src="~/assets/images/object-1.png" alt="object-1" class="object-1-small" :class="{ 'visible': isVisible }" />
 
     <div class="stats-container">
       <div class="total-game-group group" :class="{ 'visible': isVisible }">
-        <img src="/images/red-dot-icon.svg" alt="red-dot-icon" class="red-dot-icon" />
+        <img src="~/assets/images/red-dot-icon.svg" alt="red-dot-icon" class="red-dot-icon" />
         <span class="count-number">{{ animatedTotalGameCount }}</span>
         <h3 class="group-title">TOTAL GAME</h3>
       </div>
 
       <div class="user-group group" :class="{ 'visible': isVisible }">
-        <img src="/images/red-dot-icon.svg" alt="red-dot-icon" class="red-dot-icon" />
+        <img src="~/assets/images/red-dot-icon.svg" alt="red-dot-icon" class="red-dot-icon" />
         <span class="count-number">{{ animatedUserCount }}</span>
         <h3 class="group-title">USER</h3>
       </div>
@@ -188,5 +188,42 @@ const startCountAnimation = () => {
   line-height: 1.6em;
   letter-spacing: 0.02em;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .object-1-large {
+    width: 250px;
+    height: 250px;
+    bottom: 20px;
+    right: 20px;
+    rotate: 0deg;
+  }
+
+  .object-1-small {
+    width: 120px;
+    height: 120px;
+    top: 20px;
+    left: 20px;
+    rotate: 0deg;
+  }
+
+  .stats-container {
+    flex-direction: column;
+    gap: 50px;
+  }
+
+  .red-dot-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .count-number {
+    font-size: 40px;
+    min-width: auto;
+  }
+
+  .group-title {
+    font-size: 20px;
+  }
 }
 </style>

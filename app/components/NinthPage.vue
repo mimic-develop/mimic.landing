@@ -1,11 +1,11 @@
 <template>
   <div class="ninth-page-container">
     <div class="content-wrapper" ref="contentWrapper">
-      <img src="/images/object-1.png" alt="Object 1" class="object-1-top-left" ref="object1TopLeft">
-      <img src="/images/object-1.png" alt="Object 1" class="object-1-middle-left" ref="object1MiddleLeft">
-      <img src="/images/object-1.png" alt="Object 1" class="object-1-bottom-right" ref="object1BottomRight">
+      <img src="~/assets/images/object-1.png" alt="Object 1" class="object-1-top-left" ref="object1TopLeft">
+      <img src="~/assets/images/object-1.png" alt="Object 1" class="object-1-middle-left" ref="object1MiddleLeft">
+      <img src="~/assets/images/object-1.png" alt="Object 1" class="object-1-bottom-right" ref="object1BottomRight">
 
-      <img src="/images/contact-image.svg" alt="Contact Image" class="contact-image" ref="contactImage">
+      <img src="~/assets/images/contact-image.svg" alt="Contact Image" class="contact-image" ref="contactImage">
     </div>
   </div>
 </template>
@@ -117,5 +117,41 @@ onMounted(() => {
 
 .contact-image {
   width: 35rem;
+}
+
+@media (max-width: 768px) {
+  .contact-image {
+    width: 80vw;
+  }
+
+  .object-1-top-left {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    left: -20px;
+    top: -30px;
+    opacity: 0.8;
+    rotate: -136.97deg;
+  }
+
+  .object-1-middle-left {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    top: 100px;
+    left: 10px;
+    opacity: 0.8;
+    rotate: 164.22deg;
+  }
+
+  .object-1-bottom-right {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    bottom: 0;
+    right: 5px;
+    opacity: 0.8;
+    rotate: 68.73deg;
+  }
 }
 </style>

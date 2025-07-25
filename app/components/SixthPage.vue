@@ -3,7 +3,7 @@
     <video ref="videoPlayer" class="video-player" src="https://mimic.im/videos/mimic_brand_film_1080.mp4" loop playsinline></video>
     <div v-if="!isPlaying" class="play-button-overlay" @click="playVideo">
       <div class="button">
-        <img src="/images/button-wrapper.svg" alt="Wrapper">
+        <img src="~/assets/images/button-wrapper.svg" alt="Wrapper">
         <span>BRAND FILM</span>
       </div>
     </div>
@@ -47,6 +47,9 @@ watch(() => props.isCurrentPage, (isCurrent) => {
   width: 100%;
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: #000;
 }
 
@@ -90,5 +93,20 @@ watch(() => props.isCurrentPage, (isCurrent) => {
   letter-spacing: -0.03em;
   color: #000000;
   z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .video-player {
+    width: 100vw;
+    height: fit-content;
+  }
+
+  .button {
+    width: 200px;
+  }
+
+  .button span {
+    font-size: 20px;
+  }
 }
 </style>

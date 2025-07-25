@@ -47,6 +47,10 @@ const animatePaths = () => {
 onMounted(() => {
   animatePaths();
 });
+
+defineExpose({
+  animatePaths
+})
 </script>
 
 <style scoped>

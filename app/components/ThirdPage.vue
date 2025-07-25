@@ -2,17 +2,17 @@
   <div class="third-page" ref="thirdPage">
     <div class="group-container">
       <div class="group" :class="{ 'visible': isVisible }" style="transition-delay: 0s;">
-        <img src="/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
+        <img src="~/assets/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
         <h3 class="group-title">FLOW</h3>
         <p class="group-detail">“집중을 이끄는 순간”</p>
       </div>
       <div class="group" :class="{ 'visible': isVisible }" style="transition-delay: 0.65s;">
-        <img src="/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
+        <img src="~/assets/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
         <h3 class="group-title">IMMERSION</h3>
         <p class="group-detail">“기억 깊이 남는 순간”</p>
       </div>
       <div class="group" :class="{ 'visible': isVisible }" style="transition-delay: 1.3s;">
-        <img src="/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
+        <img src="~/assets/images/red-dot-icon.svg" alt="Icon" class="group-icon" />
         <h3 class="group-title">TRIGGER</h3>
         <p class="group-detail">“마음을 움직이는 순간”</p>
       </div>
@@ -84,9 +84,8 @@ onBeforeUnmount(() => {
 }
 
 .group-icon {
-  width: 107.04px;
-  height: 107.04px;
-  /* margin-bottom: 33.37px; */ /* Removed */
+  width: 107px;
+  height: 107px;
 }
 
 .group-title {
@@ -107,5 +106,27 @@ onBeforeUnmount(() => {
   line-height: 2.09em;
   letter-spacing: 0.03em;
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .group-container {
+    flex-direction: column;
+    gap: 50px; /* 모바일에서 그룹 간 세로 간격 */
+  }
+
+  .group-icon {
+    width: 80px;
+    height: 80px;
+  }
+
+  .group-title {
+    font-size: 16px;
+    margin-top: -60px;
+    margin-bottom: 20px;
+  }
+
+  .group-detail {
+    font-size: 16px;
+  }
 }
 </style>
