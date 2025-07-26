@@ -11,10 +11,10 @@ export default defineNuxtConfig({
         // 기본 메타 태그
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'MIMIC - 혁신적인 게임 플랫폼으로 모든 재미를 경험하세요' },
+        { name: 'description', content: 'MIMIC - My 3rd Place' },
 
         // SEO 메타 태그
-        { name: 'keywords', content: 'MIMIC, 게임, 플랫폼, 모바일게임, 엔터테인먼트, All in Fun' },
+        { name: 'keywords', content: 'MIMIC, 게임, 플랫폼, 모바일게임, 엔터테인먼트, All in Fun, 3rd place' },
         { name: 'author', content: 'MIMIC Team' },
         { name: 'robots', content: 'index, follow' },
         { name: 'language', content: 'ko-KR' },
@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         // Open Graph (소셜 미디어 공유용)
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: 'MIMIC - All in Fun' },
-        { property: 'og:description', content: 'MIMIC - 혁신적인 게임 플랫폼으로 모든 재미를 경험하세요' },
+        { property: 'og:description', content: 'MIMIC - My 3rd Place' },
         {
           property: 'og:image',
           content: 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20230626_267%2F1687738654396hqllR_PNG%2FMimic_Logo_512_512.png'
@@ -40,12 +40,6 @@ export default defineNuxtConfig({
         { name: 'twitter:description', content: 'MIMIC - 혁신적인 게임 플랫폼으로 모든 재미를 경험하세요' },
         { name: 'twitter:image', content: 'https://your-domain.com/twitter-image.jpg' },
 
-        // 지리적 위치 (Geo) 메타 태그
-        { name: 'geo.region', content: 'KR-11' }, // 서울특별시 (ISO 3166-2 코드)
-        { name: 'geo.placename', content: 'Seoul, South Korea' },
-        { name: 'geo.position', content: '37.5665;126.9780' }, // 서울 좌표 (위도;경도)
-        { name: 'ICBM', content: '37.5665, 126.9780' }, // 대체 좌표 형식
-
         // 모바일 최적화
         { name: 'format-detection', content: 'telephone=no' },
         { name: 'mobile-web-app-capable', content: 'yes' },
@@ -62,11 +56,7 @@ export default defineNuxtConfig({
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
 
         // 정규 URL (SEO 중복 콘텐츠 방지)
-        { rel: 'canonical', href: 'https://your-domain.com' }, // 실제 도메인으로 변경
-
-        // 다국어 지원 (필요시)
-        { rel: 'alternate', hreflang: 'ko', href: 'https://your-domain.com/ko' },
-        { rel: 'alternate', hreflang: 'en', href: 'https://your-domain.com/en' },
+        { rel: 'canonical', href: 'https://mimic.poker' }, // 실제 도메인으로 변경
       ]
     }
   }
