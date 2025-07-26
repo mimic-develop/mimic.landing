@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   app: {
     buildAssetsDir: "assets",
     head: {
-      title: 'MIMIC - All in Fun',
+      title: 'MIMIC - Fun for All',
       meta: [
         // 기본 메타 태그
         { charset: 'utf-8' },
