@@ -4,7 +4,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   app: {
-    baseURL: '/mimic.landing/',
     buildAssetsDir: "assets",
     head: {
       title: 'MIMIC - All in Fun',

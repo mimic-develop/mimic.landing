@@ -278,6 +278,13 @@ const closeQrPopup = () => {
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Courage';
+  src: url('~/assets/fonts/Courage-Regular.otf') format('truetype'); /* 폰트 파일명 확인 필요 */
+  font-weight: 400;
+  font-style: normal;
+}
+
 html, body {
   margin: 0;
   padding: 0;
