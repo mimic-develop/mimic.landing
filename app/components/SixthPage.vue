@@ -1,6 +1,6 @@
 <template>
   <div class="sixth-page-container">
-    <video ref="videoPlayer" class="video-player" src="https://mimic.im/videos/mimic_brand_film_1080.mp4" loop playsinline></video>
+    <video ref="videoPlayer" class="video-player" src="https://mimic.im/videos/mimic_brand_film_1080.mp4" poster="https://mimic.im/images/video-thumbnail.png" loop playsinline></video>
     <div v-if="!isPlaying" class="play-button-overlay" @click="playVideo">
       <div class="button">
         <img src="~/assets/images/button-wrapper.svg" alt="Wrapper">
@@ -30,8 +30,6 @@ const playVideo = () => {
 watch(() => props.isCurrentPage, (isCurrent) => {
   if (videoPlayer.value) {
     if (isCurrent) {
-      // Optionally, you can autoplay when the page becomes active.
-      // For now, we only handle the play button click.
     } else {
       videoPlayer.value.pause();
       videoPlayer.value.currentTime = 0;
@@ -96,9 +94,16 @@ watch(() => props.isCurrentPage, (isCurrent) => {
 }
 
 @media (max-width: 768px) {
+  .sixth-page-container {
+    align-items: center;
+    padding-top: 0;
+  }
+
   .video-player {
     width: 100vw;
-    height: fit-content;
+    height: auto;
+    object-fit: contain;
+    max-height: none;
   }
 
   .button {

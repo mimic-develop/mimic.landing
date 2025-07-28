@@ -1,16 +1,17 @@
 <template>
   <div class="fifth-page-container" ref="fifthPage">
-    <div class="text-content">
-      미믹의 아레나 테이블은 실시간으로 유저 정보를 테이블에 띄우는 국내 최초의 몰입형 홀덤 시스템 입니다
+    <div class="fifth-page-wrapper">
+      <div class="gms-text">GMS</div>
+      <div class="game-management-system-text">GAME MANAGEMENT SYSTEM</div>
+      <img
+          :src="tableImageUrl"
+          alt="Table Image Red"
+          class="table-image-red"/>
+      <div class="text-content" v-html="detailText">
+      </div>
+      <img src="~/assets/images/hand-box.svg" alt="Hand Box" class="hand-box-image" />
+      <img src="~/assets/images/rank-system.svg" alt="Rank System" class="rank-system-image" />
     </div>
-    <img
-        :src="tableImageUrl"
-        alt="Table Image Red"
-        class="table-image-red"/>
-    <div class="gms-text">GMS</div>
-    <div class="game-management-system-text">GAME MANAGEMENT SYSTEM</div>
-    <img src="~/assets/images/hand-box.svg" alt="Hand Box" class="hand-box-image" />
-    <img src="~/assets/images/rank-system.svg" alt="Rank System" class="rank-system-image" />
   </div>
 </template>
 
@@ -24,6 +25,7 @@ import tableImageWhite from '~/assets/images/table-image-white.svg';
 
 const emits = defineEmits<{
   (e: 'update:isScrolling', isScrolling: boolean): void;
+  (e: 'update:addWheelEvent', value: boolean): void;
 }>()
 
 gsap.registerPlugin(ScrollTrigger);
@@ -33,6 +35,10 @@ let timeline: gsap.core.Timeline | null = null;
 const fifthPage = ref(null);
 const isVisible = ref(false);
 let observer: any = null;
+
+// 터치 이벤트용 변수
+let touchStartY = 0;
+const TOUCH_THRESHOLD = 30;
 
 const handleWheel = (event: WheelEvent) => {
   if (event.deltaY > 0) { // 아래로 스크롤
@@ -55,13 +61,54 @@ const handleWheel = (event: WheelEvent) => {
   }
 };
 
-const tableImageUrl = ref(tableImageRed);
+// 터치 이벤트 핸들러
+const handleTouchStart = (event: TouchEvent) => {
+  if (!event.touches || event.touches.length === 0) return;
+  touchStartY = event.touches[0].clientY;
+};
 
-const key = ref(0);
+const handleTouchMove = (event: TouchEvent) => {
+  if (!event.touches || event.touches.length === 0) return;
+
+  const currentY = event.touches[0].clientY;
+  const deltaY = touchStartY - currentY; // 양수: 아래로 스와이프, 음수: 위로 스와이프
+
+  if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
+
+  if (deltaY > 0) { // 아래로 스와이프 (스크롤 다운과 동일)
+    if (timeline && timeline.paused()) { // 타임라인이 일시 정지 상태일 때만
+      event.preventDefault();
+      timeline.play();
+    } else if (timeline && timeline.progress() === 1) { // hand-box-image가 나타난 상태에서 한 번 더 스와이프
+      // 아무것도 하지 않아 app.vue의 스크롤 로직이 작동하도록 함
+      emits('update:isScrolling', false);
+    }
+  } else if (deltaY < 0) { // 위로 스와이프 (스크롤 업과 동일)
+    emits('update:isScrolling', false);
+
+    if (timeline && timeline.paused() && timeline.progress() > 0) { // 타임라인이 일시 정지 상태이고 시작 지점이 아닐 때만
+      event.preventDefault();
+      timeline.reverse();
+    } else if (timeline && timeline.progress() === 0) { // 타임라인이 시작 지점일 때
+      // 아무것도 하지 않아 app.vue의 스크롤 로직이 작동하도록 함
+    }
+  }
+
+  // 연속 트리거 방지
+  touchStartY = currentY;
+};
+
+const tableImageUrl = ref(tableImageRed);
 
 watch(isVisible, (newValue) => {
   if (newValue) {
+
+    emits('update:addWheelEvent', true)
+    emits('update:isScrolling', true)
+
     window.addEventListener('wheel', handleWheel, { passive: false });
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
 
     tableImageUrl.value = tableImageRed
 
@@ -70,14 +117,31 @@ watch(isVisible, (newValue) => {
       timeline.play(); // 초기 애니메이션 시작
     }
   } else {
+    emits('update:addWheelEvent', false)
+    emits('update:isScrolling', false)
+
     window.removeEventListener('wheel', handleWheel);
+    window.removeEventListener('touchstart', handleTouchStart);
+    window.removeEventListener('touchmove', handleTouchMove);
     if (timeline) {
       timeline.seek(0).pause(); // 페이지를 벗어나면 타임라인 초기화
     }
   }
 });
 
+const isMobile = ref(false);
+
+const detailText = ref('미믹의 아레나 테이블은 실시간으로 유저 정보를 테이블에 띄우는 국내 최초의 몰입형 홀덤 시스템 입니다')
+
 onMounted(() => {
+  isMobile.value = window.innerWidth <= 768;
+
+  if (isMobile.value) {
+    detailText.value = `미믹의 아레나 테이블은<br>실시간으로 유저 정보를 테이블에 띄우는<br>국내 최초의 몰입형 홀덤 시스템 입니다`
+  }
+
+
+
   const tableImage = document.querySelector('.table-image-red') as HTMLImageElement;
   const handBoxImage = document.querySelector('.hand-box-image') as HTMLImageElement;
   const rankSystemImage = document.querySelector('.rank-system-image') as HTMLImageElement;
@@ -92,19 +156,13 @@ onMounted(() => {
 
   // Determine animation values based on screen width
   let tableImageAnimProps = {};
-  if (window.innerWidth <= 768) {
+  if (isMobile.value) {
     tableImageAnimProps = {
-      left: '50%',
-      top: '45vh', // Adjusted for mobile
-      width: '90vw',
-      height: 'auto',
-      x: '-50%', // Center horizontally
-      y: '0%', // Keep y at 0 for the animation
+      marginLeft: '-120vw',
     };
   } else {
     tableImageAnimProps = {
-      left: -293,
-      top: 317.58,
+      marginLeft: '-1400px',
       width: 1120,
       height: 444.42,
     };
@@ -214,47 +272,27 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .fifth-page-container {
-  position: relative;
   width: 1920px; /* Figma frame width */
   height: 1080px; /* Figma frame height */
   background-color: #000000;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.text-content {
-  position: absolute;
-  left: 532px;
-  top: 825.19px;
-  width: 856px;
-  height: 22px;
-  font-family: "Gmarket Sans TTF";
-  font-weight: 500;
-  font-size: 19px;
-  line-height: 1.15em;
-  text-align: center;
-  color: #FFFFFF;
-  opacity: 0; /* 초기 투명도 설정 */
-  transform: translateY(60px); /* GSAP 초기 상태 */
-}
-
-.table-image-red {
-  position: absolute;
-  left: 506px;
-  top: 416.59px;
-  width: 908.35px;
-  height: 360.44px;
-  object-fit: contain;
-  opacity: 0; /* 초기 투명도 설정 */
-  transform: translateY(60px); /* GSAP 초기 상태 */
+.fifth-page-wrapper {
+  width: 908px;
+  height: 700px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .gms-text {
-  position: absolute;
-  left: 897px;
-  top: 225px;
   width: 125px;
-  height: 96px;
-  font-family: "Figerona";
+  font-family: "Figerona",serif;
   font-weight: 400;
   font-size: 60px;
   line-height: 1.6em;
@@ -262,107 +300,100 @@ onBeforeUnmount(() => {
   text-align: center;
   color: #FFFFFF;
   opacity: 0; /* 초기 투명도 설정 */
-  transform: translateY(60px); /* GSAP 초기 상태 */
 }
 
 .game-management-system-text {
-  position: absolute;
-  left: 784px;
-  top: 336px;
   width: 353px;
   height: 29px;
-  font-family: "Inter";
+  font-family: "Inter",serif;
   font-weight: 400;
   font-size: 24px;
   line-height: 1.2102272510528564em;
   text-align: center;
   color: #FFFFFF;
   opacity: 0; /* 초기 투명도 설정 */
+  margin-bottom: 45px;
+}
+
+.table-image-red {
+  width: 908px;
+  height: 360px;
+  object-fit: contain;
+  opacity: 0; /* 초기 투명도 설정 */
   transform: translateY(60px); /* GSAP 초기 상태 */
+  margin-bottom: 45px;
+}
+
+.text-content {
+  height: 22px;
+  font-family: "Gmarket Sans TTF",serif;
+  font-weight: 300;
+  font-size: 19px;
+  line-height: 1.15em;
+  text-align: center;
+  color: #FFFFFF;
+  opacity: 0; /* 초기 투명도 설정 */
 }
 
 .hand-box-image {
   position: absolute;
-  left: 550px; /* 피그마에서 확인한 x 위치 */
-  top: 273.63px; /* 피그마에서 확인한 y 위치 */
-  width: 1039.04px; /* 피그마에서 확인한 너비 */
-  height: 274.9px; /* 피그마에서 확인한 높이 */
+  margin: 0 0 140px 200px;
+  width: 1039px; /* 피그마에서 확인한 너비 */
+  height: 275px; /* 피그마에서 확인한 높이 */
   opacity: 0; /* 초기 투명도 설정 */
 }
 
 .rank-system-image {
   position: absolute;
-  left: 607px; /* 피그마에서 확인한 x 위치 */
-  top: 546.6px; /* 피그마에서 확인한 y 위치 */
-  width: 982.04px; /* 피그마에서 확인한 너비 */
-  height: 259.47px; /* 피그마에서 확인한 높이 */
+  margin: 380px 0 0 260px;
+  width: 982px; /* 피그마에서 확인한 너비 */
+  height: 259px; /* 피그마에서 확인한 높이 */
   opacity: 0; /* 초기 투명도 설정 */
 }
 
 @media (max-width: 768px) {
   .fifth-page-container {
     width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* 상단 정렬 */
-    align-items: center;
+    height: 100%;
     padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .text-content {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 60vh;
-    width: 90%;
-    font-size: 14px;
-    text-align: center;
   }
 
   .gms-text {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 30vh;
-    font-size: 30px;
+    font-size: clamp(1rem, 9vw, 5rem); /* 최소 20px, 최대 40px */
     text-align: center;
   }
 
   .game-management-system-text {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 35vh;
-    font-size: 16px;
+    font-size: clamp(1rem, 4vw, 2.4rem); /* 최소 20px, 최대 40px */
     text-align: center;
+    margin-bottom: clamp(1vw, 2vw, 3rem);
   }
 
   .table-image-red {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 40vh;
     width: 90vw;
     height: auto;
+    margin-bottom: clamp(1rem, 3vw, 3rem);
+  }
+
+  .text-content {
+    font-size: clamp(1rem, 3vw, 2rem);
+    line-height: 4vw;
+    padding: 0 3vw;
   }
 
   .hand-box-image {
     position: absolute;
-    left: 61.5%;
-    transform: translateX(-50%);
-    top: 44vh;
-    width: 66vw;
+    margin-bottom: 5vw;
+    margin-left: clamp(1rem, 9.5vw, 89vw);
+    width: 84vw;
     height: auto;
   }
 
   .rank-system-image {
     position: absolute;
-    left: 64%;
-    transform: translateX(-50%);
-    top: 54.5vh;
-    width: 62vw;
+    margin-top: 40vw;
+    margin-left: clamp(1rem, 14vw, 89vw);
+    width: 80vw;
     height: auto;
   }
 }

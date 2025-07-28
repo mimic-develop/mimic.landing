@@ -15,7 +15,7 @@
     </div>
   </header>
 
-  <div class="mimic-landing-page" @wheel.prevent="handleWheel">
+  <div class="mimic-landing-page">
     <!-- QR Code Popup -->
     <div v-if="showQrPopup" class="qr-popup-overlay" @click.self="closeQrPopup">
       <div class="qr-popup-content">
@@ -23,7 +23,7 @@
       </div>
     </div>
     <Navigation :length="9" :index="currentPage" />
-    <div class="sections-container" ref="sectionsContainer" @scrollend="handleScrollEnd">
+    <div class="sections-container" ref="sectionsContainer">
       <section class="section" ref="section1">
         <MainPage />
       </section>
@@ -37,7 +37,7 @@
         <FourthPage />
       </section>
       <section class="section" ref="section5">
-        <FifthPage @update:is-scrolling="changeScrolling"/>
+        <FifthPage @update:is-scrolling="changeScrolling" @update:add-wheel-event="handelWheelEvent"/>
       </section>
       <section class="section" ref="section6">
         <SixthPage :is-current-page="currentPage === 6" />
@@ -87,7 +87,15 @@ const section9 = ref(null);
 const isScrolling = ref(false);
 const stopScroll = ref(false);
 const showQrPopup = ref(false); // New ref for QR popup visibility
-let observer = null;
+let observer: IntersectionObserver | null = null;
+let scrollEndTimer: number | null = null;
+let wheelTimeout: number | null = null;
+const WHEEL_DELAY = 100; // 100ms 딜레이
+const MIN_DELTA = 10; // 최소 스크롤 임계값
+
+// iOS 제스처용
+let touchStartY = 0;
+const TOUCH_THRESHOLD = 30;
 
 const changeScrolling = (value: boolean) => {
   stopScroll.value = value
@@ -142,31 +150,77 @@ onMounted(() => {
   observer.observe(section7.value);
   observer.observe(section8.value);
   observer.observe(section9.value);
+
+  handelWheelEvent(false)
 });
 
 onBeforeUnmount(() => {
   if (observer) {
     observer.disconnect();
+    observer = null;
+  }
+  if (sectionsContainer.value) {
+    handelWheelEvent(true)
+  }
+  if (scrollEndTimer) {
+    window.clearTimeout(scrollEndTimer);
+    scrollEndTimer = null;
+  }
+  if (wheelTimeout) {
+    clearTimeout(wheelTimeout);
+    wheelTimeout = null;
   }
 });
 
-const handleWheel = (event) => {
-  if (stopScroll.value || isScrolling.value) return;
-
-  const direction = event.deltaY > 0 ? 'down' : 'up';
-
-  if (direction === 'down') {
-    if (currentPage.value < 9) {
-      scrollToPage(currentPage.value + 1);
-    }
+const handelWheelEvent = (value: boolean) => {
+  if (value) {
+    // sectionsContainer.value.removeEventListener('wheel', handleWheel as EventListener);
+    // sectionsContainer.value.removeEventListener('scroll', onScroll);
+    // sectionsContainer.value.removeEventListener('touchstart', onTouchStart);
+    // sectionsContainer.value.removeEventListener('touchmove', onTouchMove);
   } else {
-    if (currentPage.value > 1) {
-      scrollToPage(currentPage.value - 1);
-    }
+    sectionsContainer.value.addEventListener('wheel', handleWheel as EventListener, { passive: false });
+    sectionsContainer.value.addEventListener('scroll', onScroll, { passive: true });
+
+    // iOS Safari 제스처
+    sectionsContainer.value.addEventListener('touchstart', onTouchStart, { passive: true });
+    sectionsContainer.value.addEventListener('touchmove', onTouchMove, { passive: false });
   }
+}
+
+const handleWheel = (event) => {
+  if (stopScroll.value || isScrolling.value) {
+    event.preventDefault()
+
+    return
+  }
+
+  // 최소 스크롤 임계값 확인
+  if (Math.abs(event.deltaY) < MIN_DELTA) return;
+
+  // 이전 타이머 취소
+  if (wheelTimeout) {
+    clearTimeout(wheelTimeout);
+  }
+
+  // 새 타이머 설정 (디바운싱)
+  wheelTimeout = setTimeout(() => {
+    const direction = event.deltaY > 0 ? 'down' : 'up';
+
+    if (direction === 'down') {
+      if (currentPage.value < 9) {
+        scrollToPage(currentPage.value + 1);
+      }
+    } else {
+      if (currentPage.value > 1) {
+        scrollToPage(currentPage.value - 1);
+      }
+    }
+  }, WHEEL_DELAY);
 };
 
 const scrollToPage = (pageNumber) => {
+  if (stopScroll.value || isScrolling.value) return;
   isScrolling.value = true;
   let targetSection = null;
   if (pageNumber === 1) {
@@ -202,8 +256,44 @@ const scrollToPage = (pageNumber) => {
   }
 };
 
-const handleScrollEnd = () => {
-  isScrolling.value = false;
+// iOS Safari 제스처 대응
+const onTouchStart = (e: TouchEvent) => {
+  if (!e.touches || e.touches.length === 0) return;
+  touchStartY = e.touches[0].clientY;
+};
+
+const onTouchMove = (e: TouchEvent) => {
+  if (stopScroll.value || isScrolling.value) {
+    e.preventDefault()
+
+    return
+  }
+
+
+  const currentY = e.touches[0].clientY;
+  const deltaY = touchStartY - currentY; // 양수: 아래로 스와이프(다음 섹션)
+
+  if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
+
+  // 기본 스크롤 방지
+  if (e.cancelable) e.preventDefault();
+
+  if (deltaY > 0 && currentPage.value < 9) {
+    scrollToPage(currentPage.value + 1);
+  } else if (deltaY < 0 && currentPage.value > 1) {
+    scrollToPage(currentPage.value - 1);
+  }
+
+  // 연속 트리거 방지
+  touchStartY = currentY;
+};
+
+const onScroll = () => {
+  // 스크롤 종료 판단 (scrollend 대체)
+  if (scrollEndTimer) window.clearTimeout(scrollEndTimer);
+  scrollEndTimer = window.setTimeout(() => {
+    isScrolling.value = false;
+  }, 200); // 120ms에서 200ms로 증가
 };
 
 const goToInstagram = () => {
@@ -307,6 +397,7 @@ html, body {
   height: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
@@ -428,11 +519,15 @@ html, body {
 }
 
 @media (max-width: 768px) {
+  html {
+    font-size: 62.5%; /* 1rem = 10px */
+  }
+
   .header {
-    top: 5vh;
+    top: 3vh;
     width: 90vw;
     left: 50%;
-    transform: translateX(-50%) scale(0.8); /* Scale down for mobile */
+    transform: translateX(-50%) scale(0.9); /* Scale down for mobile */
   }
 
   .logo {
@@ -450,8 +545,9 @@ html, body {
 
   .app-download-button {
     font-size: 3vw;
-    padding: 1.5vw 3vw;
+    padding: 1.8vw 3vw 1.2vw 3vw;
   }
+
 
   .qr-popup-content {
     width: 100%; /* Full width on mobile */

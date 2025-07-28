@@ -209,21 +209,21 @@ const startCountAnimation = () => {
 
   .stats-container {
     flex-direction: column;
-    gap: 50px;
+    gap: 19vw;
   }
 
   .red-dot-icon {
-    width: 60px;
-    height: 60px;
+    width: 10vw;
+    height: 10vw;
   }
 
   .count-number {
-    font-size: 40px;
-    min-width: auto;
+    font-size: 7vw;
+    margin-bottom: 0;
   }
 
   .group-title {
-    font-size: 20px;
+    font-size: 4vw;
   }
 }
 </style>

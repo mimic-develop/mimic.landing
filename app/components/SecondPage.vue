@@ -3,7 +3,15 @@
     <div class="wrapper">
       <div class="content">
         <h2 class="title">All in Fun</h2>
-        <p class="detail">
+        <p class="detail" v-if="isMobile">
+          다양한 재미가 자연스럽게 공존하는 곳,<br />
+          미믹입니다<br />
+          그렇게 만들어진 공간은 <br />
+          미믹에 어울리는 사람들을 끌어당깁니다<br />
+          미믹은 언제 찾아와도 편안하고, 다시 오고 싶은<br />
+          당신의 제 3의 공간이 됩니다
+        </p>
+        <p class="detail" v-else>
           다양한 재미가 자연스럽게 공존하는 곳, 미믹입니다<br />
           그렇게 만들어진 공간은 미믹에 어울리는 사람들을 끌어당깁니다<br />
           미믹은 언제 찾아와도 편안하고, 다시 오고 싶은 당신의 제 3의 공간이 됩니다
@@ -24,7 +32,11 @@ const secondPage = ref(null);
 const isVisible = ref(false);
 let observer = null;
 
+const isMobile = ref(false);
+
 onMounted(() => {
+  isMobile.value = window.innerWidth <= 768;
+
   const options = {
     threshold: 0.5, // 50% 이상 보일 때
   };
@@ -161,12 +173,16 @@ onBeforeUnmount(() => {
 }
 
 @media (max-width: 768px) {
+  .second-page{
+    padding: 0 8vw;
+  }
   .title {
     font-size: calc(100vw / 9);
+    margin-bottom: 10vw;
   }
 
   .detail {
-    font-size: calc(100vw / 25);
+    font-size: calc(100vw / 43);
   }
 
   .rectangle-4 {

@@ -20,10 +20,19 @@
         <p class="all-in-fun" ref="allInFunText">ALL IN FUN</p>
         <p class="mimic-text" ref="mimicText">MIMIC</p>
 
-        <p class="description" ref="descriptionText">
+        <p class="description" ref="descriptionText" v-if="isMobile">
+          MIMIC이 가진 핵심 가치인<br>
+          친철한 응대, 공정한 게임 운영,<br>
+          청결한 환경, 초보자에 대한 배려<br>
+          그리고 공동체의 성장을 바탕으로<br>
+          브랜드 가치를 지키며 어디서든<br>
+          MIMIC의 경험을 누릴 수 있도록 확장해 나갑니다
+        </p>
+        <p class="description" ref="descriptionText" v-else>
           MIMIC이 가진 핵심 가치인 친철한 응대, 공정한 게임 운영, 청결한 환경, 초보자에 대한 배려 그리고 공동체의 성장을 바탕으로<br>
           브랜드 가치를 지키며 어디서든 MIMIC의 경험을 누릴 수 있도록 확장해 나갑니다
         </p>
+
       </div>
 
     </div>
@@ -103,7 +112,11 @@ watch(() => props.isCurrentPage, (isCurrent) => {
   }
 });
 
+const isMobile = ref(false);
+
 onMounted(() => {
+  isMobile.value = window.innerWidth <= 768;
+
   setupAnimation();
   if (props.isCurrentPage) {
     tl.play();
@@ -319,8 +332,8 @@ onMounted(() => {
     top: 230px;
     transform: translateX(-50%);
     left: 50%;
-    width: 80vw;
-    font-size: 13px;
+    width: 90vw;
+    font-size: 3.5vw;
   }
 }
 </style>
