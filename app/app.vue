@@ -90,7 +90,9 @@ const showQrPopup = ref(false); // New ref for QR popup visibility
 let observer: IntersectionObserver | null = null;
 let scrollEndTimer: number | null = null;
 let wheelTimeout: number | null = null;
+let touchTimeout: number | null = null;
 const WHEEL_DELAY = 100; // 100ms 딜레이
+const TOUCH_DELAY = 100; // 100ms 딜레이 (wheel과 동일)
 const MIN_DELTA = 10; // 최소 스크롤 임계값
 
 // iOS 제스처용
@@ -169,6 +171,10 @@ onBeforeUnmount(() => {
   if (wheelTimeout) {
     clearTimeout(wheelTimeout);
     wheelTimeout = null;
+  }
+  if (touchTimeout) {
+    clearTimeout(touchTimeout);
+    touchTimeout = null;
   }
 });
 
@@ -265,10 +271,8 @@ const onTouchStart = (e: TouchEvent) => {
 const onTouchMove = (e: TouchEvent) => {
   if (stopScroll.value || isScrolling.value) {
     e.preventDefault()
-
     return
   }
-
 
   const currentY = e.touches[0].clientY;
   const deltaY = touchStartY - currentY; // 양수: 아래로 스와이프(다음 섹션)
@@ -278,14 +282,19 @@ const onTouchMove = (e: TouchEvent) => {
   // 기본 스크롤 방지
   if (e.cancelable) e.preventDefault();
 
-  if (deltaY > 0 && currentPage.value < 9) {
-    scrollToPage(currentPage.value + 1);
-  } else if (deltaY < 0 && currentPage.value > 1) {
-    scrollToPage(currentPage.value - 1);
+  // 이전 타이머 취소
+  if (touchTimeout) {
+    clearTimeout(touchTimeout);
   }
 
-  // 연속 트리거 방지
-  touchStartY = currentY;
+  // 새 타이머 설정 (디바운싱)
+  touchTimeout = setTimeout(() => {
+    if (deltaY > 0 && currentPage.value < 9) {
+      scrollToPage(currentPage.value + 1);
+    } else if (deltaY < 0 && currentPage.value > 1) {
+      scrollToPage(currentPage.value - 1);
+    }
+  }, TOUCH_DELAY);
 };
 
 const onScroll = () => {
