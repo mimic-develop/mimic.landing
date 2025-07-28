@@ -259,6 +259,18 @@ const scrollToPage = (pageNumber) => {
 
   if (targetSection) {
     targetSection.scrollIntoView({ behavior: 'smooth' });
+
+    targetSection.addEventListener(
+        'transitionend', // 또는 'scrollend' 지원 브라우저면 scrollend
+        () => { isScrolling.value = false; },
+        { once: true }
+    );
+
+    targetSection.addEventListener(
+        'scrollend', // 또는 'scrollend' 지원 브라우저면 scrollend
+        () => { isScrolling.value = false; },
+        { once: true }
+    );
   }
 };
 
@@ -409,6 +421,9 @@ html, body {
   -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+
+  scroll-snap-stop: always;
+  touch-action: none;
 }
 
 .sections-container::-webkit-scrollbar {
