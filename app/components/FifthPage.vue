@@ -9,8 +9,8 @@
           class="table-image-red"/>
       <div class="text-content" v-html="detailText">
       </div>
-      <img src="~/assets/images/hand-box.svg" alt="Hand Box" class="hand-box-image" />
-      <img src="~/assets/images/rank-system.svg" alt="Rank System" class="rank-system-image" />
+      <img :src="isMobile ? handBoxMobile : handBox" alt="Hand Box" class="hand-box-image" />
+      <img :src="isMobile ? rankSystemMobile : rankSystem" alt="Rank System" class="rank-system-image" />
     </div>
   </div>
 </template>
@@ -22,6 +22,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import tableImageRed from '~/assets/images/table-image-red.svg';
 import tableImageWhite from '~/assets/images/table-image-white.svg';
+
+import handBox from '~/assets/images/hand-box.svg';
+import handBoxMobile from '~/assets/images/hand-box-mobile.svg';
+import rankSystem from '~/assets/images/rank-system.svg';
+import rankSystemMobile from '~/assets/images/rank-system-mobile.svg';
+
 
 const emits = defineEmits<{
   (e: 'update:isScrolling', isScrolling: boolean): void;
@@ -139,8 +145,6 @@ onMounted(() => {
   if (isMobile.value) {
     detailText.value = `미믹의 아레나 테이블은<br>실시간으로 유저 정보를 테이블에 띄우는<br>국내 최초의 몰입형 홀덤 시스템 입니다`
   }
-
-
 
   const tableImage = document.querySelector('.table-image-red') as HTMLImageElement;
   const handBoxImage = document.querySelector('.hand-box-image') as HTMLImageElement;
@@ -383,17 +387,17 @@ onBeforeUnmount(() => {
 
   .hand-box-image {
     position: absolute;
-    margin-bottom: 5vw;
-    margin-left: clamp(1rem, 9.5vw, 89vw);
-    width: 84vw;
+    margin-bottom: 36vw;
+    margin-left: clamp(1rem, 9.2vw, 89vw);
+    width: 86vw;
     height: auto;
   }
 
   .rank-system-image {
     position: absolute;
-    margin-top: 40vw;
+    margin-top: 62vw;
     margin-left: clamp(1rem, 14vw, 89vw);
-    width: 80vw;
+    width: 82vw;
     height: auto;
   }
 }

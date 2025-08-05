@@ -195,82 +195,62 @@ const handelWheelEvent = (value: boolean) => {
 }
 
 const handleWheel = (event) => {
-  if (stopScroll.value || isScrolling.value) {
-    event.preventDefault()
+  event.preventDefault(); // 기본 스크롤 동작을 막아 제어권을 완전히 가져옵니다.
 
-    return
+  if (stopScroll.value || isScrolling.value) {
+    return; // 스크롤이 막혀있거나 이미 애니메이션 중이면 무시합니다.
   }
 
   // 최소 스크롤 임계값 확인
   if (Math.abs(event.deltaY) < MIN_DELTA) return;
 
-  // 이전 타이머 취소
-  if (wheelTimeout) {
-    clearTimeout(wheelTimeout);
-  }
+  isScrolling.value = true; // 스크롤 시작을 알리고 플래그를 잠급니다.
 
-  // 새 타이머 설정 (디바운싱)
-  wheelTimeout = setTimeout(() => {
-    const direction = event.deltaY > 0 ? 'down' : 'up';
+  const direction = event.deltaY > 0 ? 'down' : 'up';
 
-    if (direction === 'down') {
-      if (currentPage.value < 9) {
-        scrollToPage(currentPage.value + 1);
-      }
+  if (direction === 'down') {
+    if (currentPage.value < 9) {
+      scrollToPage(currentPage.value + 1);
     } else {
-      if (currentPage.value > 1) {
-        scrollToPage(currentPage.value - 1);
-      }
+      isScrolling.value = false; // 마지막 페이지에서는 더 이상 스크롤하지 않으므로 플래그를 해제합니다.
     }
-  }, WHEEL_DELAY);
+  } else {
+    if (currentPage.value > 1) {
+      scrollToPage(currentPage.value - 1);
+    } else {
+      isScrolling.value = false; // 첫 페이지에서는 더 이상 스크롤하지 않으므로 플래그를 해제합니다.
+    }
+  }
 };
 
 const scrollToPage = (pageNumber) => {
-  if (stopScroll.value || isScrolling.value) return;
-  isScrolling.value = true;
-  let targetSection = null;
-  if (pageNumber === 1) {
-    targetSection = section1.value;
-  }
-  else if (pageNumber === 2) {
-    targetSection = section2.value;
-  }
-  else if (pageNumber === 3) {
-    targetSection = section3.value;
-  }
-  else if (pageNumber === 4) {
-    targetSection = section4.value;
-  }
-  else if (pageNumber === 5) {
-    targetSection = section5.value;
-  }
-  else if (pageNumber === 6) {
-    targetSection = section6.value;
-  }
-  else if (pageNumber === 7) {
-    targetSection = section7.value;
-  }
-  else if (pageNumber === 8) {
-    targetSection = section8.value;
-  }
-  else if (pageNumber === 9) {
-    targetSection = section9.value;
-  }
+  const targetSection = getSectionRef(pageNumber);
 
   if (targetSection) {
     targetSection.scrollIntoView({ behavior: 'smooth' });
 
-    targetSection.addEventListener(
-        'transitionend', // 또는 'scrollend' 지원 브라우저면 scrollend
-        () => { isScrolling.value = false; },
-        { once: true }
-    );
+    // 'smooth' 스크롤 애니메이션이 끝날 시간을 예측하여 플래그를 해제합니다.
+    // 이 방식이 scrollend 이벤트보다 브라우저 호환성이 좋습니다.
+    setTimeout(() => {
+      isScrolling.value = false;
+    }, 1000); // 1초 후 스크롤 잠금 해제
+  } else {
+    isScrolling.value = false; // 대상 섹션이 없으면 즉시 잠금 해제
+  }
+};
 
-    targetSection.addEventListener(
-        'scrollend', // 또는 'scrollend' 지원 브라우저면 scrollend
-        () => { isScrolling.value = false; },
-        { once: true }
-    );
+const getSectionRef = (pageNumber) => {
+  switch (pageNumber) {
+    case 1: return section1.value;
+    case 2: return section2.value;
+    case 3: return section3.value;
+    case 4: return section4.value;
+    case 5: return section5.value;
+    case 6: return section6.value;
+    case 7: return section7.value;
+    case 8: return section8.value;
+    case 9: return section9.value;
+    default: return null;
   }
 };
 
