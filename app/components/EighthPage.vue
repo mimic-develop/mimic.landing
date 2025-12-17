@@ -126,10 +126,9 @@ onMounted(() => {
 }
 .branch-image {
   width: 631px;
-  height: 298px;
+  height: 404px;
   margin-left: 235px;
-  margin-bottom: 240px;
-
+  margin-bottom: 140px;
 }
 
 .map-image {
@@ -192,9 +191,9 @@ onMounted(() => {
   }
 
   .branch-image {
-    width: calc(344px*0.75);
+    width: calc(344px*0.8);
     height: auto;
-    margin: 0 0 -200px 60px;
+    margin: 0 0 -250px 60px;
   }
 
   .map-image {
