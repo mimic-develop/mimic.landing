@@ -7,6 +7,7 @@
 
       <img src="~/assets/images/contact-image.svg" alt="Contact Image" class="contact-image" ref="contactImage">
     </div>
+    <a href="/probability" class="probability-link">확률형 아이템 정보</a>
   </div>
 </template>
 
@@ -117,6 +118,20 @@ onMounted(() => {
 
 .contact-image {
   width: 35rem;
+}
+
+.probability-link {
+  position: absolute;
+  bottom: 16px;
+  /* 화면 높이가 100vh 라 휴대폰 주소창·툴바가 접히지 않음 → 그만큼 올려서 보이게. svh 미지원 브라우저는 위 16px 유지 */
+  bottom: calc(16px + 100vh - 100svh + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  color: #8a8a8a;
+  text-decoration: underline;
+  white-space: nowrap;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
