@@ -3,6 +3,13 @@ export default defineNuxtConfig({
   ssr: false,
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  runtimeConfig: {
+    public: {
+      // 뽑기 확률 API 주소(예: https://mimic.im/api). 비어 있으면 /probability 는 예시 데이터로 보임.
+      // 빌드 때 NUXT_PUBLIC_GACHA_API_BASE 로 넣는다.
+      gachaApiBase: '',
+    },
+  },
   app: {
     buildAssetsDir: "assets",
     head: {
